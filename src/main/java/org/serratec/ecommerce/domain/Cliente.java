@@ -2,20 +2,21 @@ package org.serratec.ecommerce.domain;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.br.CPF;
 @Entity
 public class Cliente {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private Long id;
 	
 	@NotBlank(message = "nome não pode ser vazio" )
@@ -25,19 +26,18 @@ public class Cliente {
 	private String sobrenome;
 	
 	//TODO:Vqalidação de idade maior 18
+	
 	private LocalDate dataNascimento;
 	
 	@Email(message ="verifique o campo email")
+	@NotBlank(message = "email não pode ser vazio" )
 	private String email;
 	
 	
 	
-	private String cpf;
-
-
 	public Cliente(Long id, @NotBlank(message = "nome não pode ser vazio") String nome,
 			@NotBlank(message = "nome não pode ser vazio") String sobrenome, LocalDate dataNascimento,
-			@Email(message = "verifique o campo email") String email, @CPF String cpf) {
+			@Email(message = "verifique o campo email") String email, String cpf, Endereco endereco) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -45,7 +45,12 @@ public class Cliente {
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 		this.cpf = cpf;
+	//	this.endereco = endereco;
 	}
+
+	private String cpf;
+
+
 	public Cliente() {
 		
 	}
@@ -110,6 +115,11 @@ public class Cliente {
 		this.cpf = cpf;
 	}
 	
-	//private Endereco endereco;
-	
+	/*
+	 * @Embedded private Endereco endereco;
+	 * 
+	 * 
+	 * public Endereco getEndereco() { return endereco; } public void
+	 * setEndereco(Endereco endereco) { this.endereco = endereco; }
+	 */
 }
