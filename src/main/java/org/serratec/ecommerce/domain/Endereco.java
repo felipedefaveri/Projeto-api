@@ -1,6 +1,6 @@
 package org.serratec.ecommerce.domain;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +12,7 @@ public class Endereco {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_endereco")
 	private Long id;
 	
 	@NotBlank(message = "nome não pode ser vazio" )
@@ -104,5 +105,4 @@ public class Endereco {
 	public void setCEP(String cEP) {
 		this.CEP = cEP;
 	}
-	
 }

@@ -35,7 +35,7 @@ public class CategoriaService {
 		categoria.setId(id);
 		return categoriaRepository.save(categoria);
 	}
-
+	
 	public Boolean deletar(String nome) {
 		if(categoriaRepository.existsByNome(nome)) {
 			categoriaRepository.deleteByNome(nome);

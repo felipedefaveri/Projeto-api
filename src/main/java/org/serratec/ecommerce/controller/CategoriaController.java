@@ -45,8 +45,9 @@ public class CategoriaController {
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public List<Categoria> obterTodos() {
-		return categoriaService.obterTodos();
+	public ResponseEntity<List<Categoria>> obterTodos() {
+		List<Categoria> categorias = categoriaService.obterTodos();
+		return ResponseEntity.ok(categorias);
 	}
 	
 	@GetMapping("/{nome}")
@@ -83,11 +84,11 @@ public class CategoriaController {
 		
 		URI uri = null;
 		try {
-			uri = new URI("/categoria/" + categoriaSalva.getId());
+			uri = new URI("/categoria/" + categoriaSalva.getNome());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.created(uri).body(categoria);	
+		return ResponseEntity.created(uri).body(categoriaSalva);	
 	}
 
 	@PutMapping("/{nome}")
@@ -121,11 +122,10 @@ public class CategoriaController {
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
 	public ResponseEntity<Categoria> deletar(@PathVariable String nome) {
-		if(categoriaService.deletar(nome)) {
-			return ResponseEntity.noContent().build();	
+		if(!categoriaService.deletar(nome)) {
+			return ResponseEntity.notFound().build();
 		}
-		categoriaService.deletar(nome);
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.noContent().build();	
 	}
 
 }
