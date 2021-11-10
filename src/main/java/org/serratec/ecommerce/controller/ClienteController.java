@@ -36,6 +36,7 @@ public class ClienteController {
 		List<Cliente> clientes = clienteRepository.findAll();
 		return ResponseEntity.ok(clientes);
 	}
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "cria uma nova categoria", notes = " criar categoria")
