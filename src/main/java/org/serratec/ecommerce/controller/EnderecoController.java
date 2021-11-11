@@ -58,7 +58,7 @@ public class EnderecoController {
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
 	public ResponseEntity<Endereco> buscar(@PathVariable Long id) {
-		Optional<Endereco> endereco = enderecoService.findById(id);
+		Optional<Endereco> endereco = enderecoService.buscar(id);
 		if (endereco.isPresent()) {
 			return ResponseEntity.ok(endereco.get());
 		}

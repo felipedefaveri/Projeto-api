@@ -19,7 +19,7 @@ public class EnderecoService {
         return enderecoRepository.findAll();
     }
 
-    public Optional<Endereco> findById(Long id) {
+    public Optional<Endereco> buscar(Long id) {
         return enderecoRepository.findById(id);
     }
 

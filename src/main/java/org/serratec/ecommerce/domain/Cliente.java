@@ -1,6 +1,7 @@
 package org.serratec.ecommerce.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
@@ -42,14 +44,17 @@ public class Cliente {
 	@Size(max=11, message = "O CPF não pode ter mais que {max} números")
 	private String cpf;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "id_endereco")
 	private Endereco endereco;
+	
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos;
 	
 	public Cliente() {
 	}
 
-	public Cliente(Long id, String nome, String sobrenome, LocalDate dataNascimento, String email, String cpf, Endereco endereco) {
+	public Cliente(Long id, String nome, String sobrenome, LocalDate dataNascimento, String email, String cpf, Endereco endereco, List<Pedido> pedidos) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
@@ -57,6 +62,7 @@ public class Cliente {
 		this.email = email;
 		this.cpf = cpf;
 		this.endereco = endereco;
+		this.pedidos = pedidos;
 	}
 
 	public Long getId() {
@@ -113,5 +119,9 @@ public class Cliente {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 }

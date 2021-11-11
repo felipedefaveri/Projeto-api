@@ -19,7 +19,7 @@ public class CategoriaService {
 		return categoriaRepository.findAll();
 	}
 
-	public Optional<Categoria> findByNome(String nome) {
+	public Optional<Categoria> buscar(String nome) {
 		return categoriaRepository.findByNome(nome);
 	}
 

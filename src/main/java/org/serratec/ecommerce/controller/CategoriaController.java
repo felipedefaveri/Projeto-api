@@ -61,7 +61,7 @@ public class CategoriaController {
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
 	public ResponseEntity<Categoria> buscar(@PathVariable String nome) {
-		Optional<Categoria> categoria = categoriaService.findByNome(nome);
+		Optional<Categoria> categoria = categoriaService.buscar(nome);
 		if (categoria.isPresent()) {
 			return ResponseEntity.ok(categoria.get());
 		}

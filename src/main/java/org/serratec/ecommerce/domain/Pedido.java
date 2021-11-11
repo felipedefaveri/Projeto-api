@@ -2,42 +2,50 @@ package org.serratec.ecommerce.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-
-//TODO:verificar os relacionamentos 
 @Entity
 public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_pedido")
 	private Long id;
-
+	
+	@Column(name = "data_pedido")
 	private LocalDateTime dataPedido;
 
-	private Double valorFinal;
+	private Double valorTotal;
 
-	private Long quantidade;
-
+	@Column(name = "data_envio")
 	private LocalDateTime dataEnvio;
 
+	@Column(name = "data_entrega")
 	private LocalDateTime dataEntrega;
+	
+	private String status;
 
-	//relacionamento one to many
-//	private List<Produto> produtos;
+	@ManyToOne
+	@JoinColumn(name = "id_cliente")
+	private Cliente cliente;
+	
+	public Pedido() {
+	}
 
-	public Pedido(Long id, LocalDateTime dataPedido, Double valorFinal, Long quantidade, LocalDateTime dataEnvio,
-			LocalDateTime dataEntrega) {
-		super();
+	public Pedido(Long id, LocalDateTime dataPedido, Double valorTotal, LocalDateTime dataEnvio,
+			LocalDateTime dataEntrega, String status, Cliente cliente) {
 		this.id = id;
 		this.dataPedido = dataPedido;
-		this.valorFinal = valorFinal;
-		this.quantidade = quantidade;
+		this.valorTotal = valorTotal;
 		this.dataEnvio = dataEnvio;
 		this.dataEntrega = dataEntrega;
-//		this.produtos = produtos;
+		this.status = status;
+		this.cliente = cliente;
 	}
 
 	public Long getId() {
@@ -56,20 +64,12 @@ public class Pedido {
 		this.dataPedido = dataPedido;
 	}
 
-	public Double getValorFinal() {
-		return valorFinal;
+	public Double getValorTotal() {
+		return valorTotal;
 	}
 
-	public void setValorFinal(Double valorFinal) {
-		this.valorFinal = valorFinal;
-	}
-
-	public Long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 
 	public LocalDateTime getDataEnvio() {
@@ -88,15 +88,15 @@ public class Pedido {
 		this.dataEntrega = dataEntrega;
 	}
 
-	//public List<Produto> getProdutos() {
-	//	return produtos;
-	//}
+	public String getStatus() {
+		return status;
+	}
 
-	//public void setProdutos(List<Produto> produtos) {
-	//.produtos = produtos;
-//	}
-	
-	//relacionamento one to one
-	//private Cliente cliente;
-	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
 }

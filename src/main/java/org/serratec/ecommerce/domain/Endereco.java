@@ -1,10 +1,13 @@
 package org.serratec.ecommerce.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -42,11 +45,14 @@ public class Endereco {
 	@Pattern(regexp="^\\d{5}[-]?\\d{3}$")
 	private String cep;
 	
+	@OneToMany(mappedBy = "endereco")
+	private List<Cliente> listCliente;
+	
 	public Endereco() {
 		
 	}
 
-	public Endereco(Long id, String rua, String numero, String complemento, String bairro, String cidade, String estado, String pais, String cep) {
+	public Endereco(Long id, String rua, String numero, String complemento, String bairro, String cidade, String estado, String pais, String cep, List<Cliente> listCliente) {
 		this.id = id;
 		this.rua = rua;
 		this.numero = numero;
@@ -56,6 +62,7 @@ public class Endereco {
 		this.estado = estado;
 		this.pais = pais;
 		this.cep = cep;
+		this.listCliente = listCliente;
 	}
 
 	public Long getId() {
@@ -128,5 +135,9 @@ public class Endereco {
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}
+
+	public List<Cliente> getListCliente() {
+		return listCliente;
 	}
 }

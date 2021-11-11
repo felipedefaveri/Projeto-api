@@ -59,7 +59,7 @@ public class ClienteController {
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
 	public ResponseEntity<Cliente> buscar(@PathVariable Long id) {
-		Optional<Cliente> cliente = clienteService.findById(id);
+		Optional<Cliente> cliente = clienteService.buscar(id);
 		if (cliente.isPresent()) {
 			return ResponseEntity.ok(cliente.get());
 		}

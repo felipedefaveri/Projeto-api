@@ -20,7 +20,7 @@ public class PedidoService {
             return pedidoRepository.findAll();
         }
 
-        public Optional<Pedido> findById(Long id) {
+        public Optional<Pedido> buscar(Long id) {
             return pedidoRepository.findById(id);
         }
 
