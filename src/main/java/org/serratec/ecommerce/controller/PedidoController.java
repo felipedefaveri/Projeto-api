@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.serratec.ecommerce.domain.Pedido;
-import org.serratec.ecommerce.repository.PedidoRepository;
 import org.serratec.ecommerce.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
