@@ -1,10 +1,13 @@
 package org.serratec.ecommerce.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -17,15 +20,18 @@ public class Categoria {
 	
 	@NotBlank(message = "Nome da categoria não pode ser vazio" )
 	@Size(max=200, min=4, message = "O nome não pode ser menor que {min} caracteres ou maior que {max} caracteres")
-	@Column
 	private String nome;
+	
+	@OneToMany(mappedBy = "categoria")
+	private List<Produto> produtos;
 	
 	public Categoria() {
 	}
 
-	public Categoria(Long id,String nome) {
+	public Categoria(Long id, String nome, List<Produto> produtos) {
 		this.id = id;
 		this.nome = nome;
+		this.produtos = produtos;
 	}
 
 	public Long getId() {
@@ -42,5 +48,13 @@ public class Categoria {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public List<Produto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 }

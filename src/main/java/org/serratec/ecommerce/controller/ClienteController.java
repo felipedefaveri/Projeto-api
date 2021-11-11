@@ -44,7 +44,7 @@ public class ClienteController {
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
 	public ResponseEntity<List<Cliente>> obterTodos() {
-		List<Cliente> clientes = clienteService.findAll();
+		List<Cliente> clientes = clienteService.obterTodos();
 		return ResponseEntity.ok(clientes);
 	}
 	
@@ -82,7 +82,7 @@ public class ClienteController {
 		
 		URI uri = null;
 		try {
-			uri = new URI("/cliente/" + clienteSalvo.getId());
+			uri = new URI("/api/cliente/" + clienteSalvo.getId());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}

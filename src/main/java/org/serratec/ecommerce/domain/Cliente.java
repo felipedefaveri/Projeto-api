@@ -24,11 +24,9 @@ public class Cliente {
 	private Long id;
 	
 	@NotBlank(message = "Nome não pode ser vazio" )
-	@Column
 	private String nome;
 	
 	@NotBlank(message = "Sobrenome não pode ser vazio" )
-	@Column
 	private String sobrenome;
 	
 	@Past(message = "Data inválida")
@@ -37,13 +35,11 @@ public class Cliente {
 	
 	@Email(message ="E-mail incorreto")
 	@NotBlank(message = "E-mail não pode ser vazio")
-	@Column
 	private String email;
 	
 	@CPF(message = "CPF incorreto")
 	@NotBlank(message = "CPF não pode ser vazio")
 	@Size(max=11, message = "O CPF não pode ter mais que {max} números")
-	@Column
 	private String cpf;
 	
 	@OneToOne

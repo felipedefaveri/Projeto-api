@@ -5,10 +5,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.serratec.ecommerce.domain.Categoria;
+import org.serratec.ecommerce.domain.Endereco;
+import org.serratec.ecommerce.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,110 +22,106 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.serratec.ecommerce.service.CategoriaService;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/api/categoria")
-public class CategoriaController {
-	
+@RequestMapping("/api/endereco")
+public class EnderecoController {
 	@Autowired
-	private CategoriaService categoriaService;
+	private EnderecoService enderecoService;
 	
 	@GetMapping
-	@ApiOperation(value = "Retorna todas as categorias", notes = "Todas as categorias")
+	@ApiOperation(value = "Retorna todas os endereços", notes = "Todos os endereços")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Categorias obtidas com sucesso"),
+			@ApiResponse(code = 200, message = "Endereços obtidos com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
 			@ApiResponse(code = 404, message = "Recurso não encontrado"),
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public ResponseEntity<List<Categoria>> obterTodos() {
-		List<Categoria> categorias = categoriaService.obterTodos();
-		return ResponseEntity.ok(categorias);
+	public ResponseEntity<List<Endereco>> obterTodos() {
+		List<Endereco> enderecos = enderecoService.obterTodos();
+		return ResponseEntity.ok(enderecos);
 	}
 	
-	@GetMapping("/{nome}")
-	@ApiOperation(value = "Retorna uma categoria", notes = "Categoria por nome")
+	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um endereço por ID", notes = "Endereço por ID")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Categoria obtida com sucesso"),
+			@ApiResponse(code = 200, message = "Endereço obtido com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
 			@ApiResponse(code = 404, message = "Recurso não encontrado"),
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public ResponseEntity<Categoria> buscar(@PathVariable String nome) {
-		Optional<Categoria> categoria = categoriaService.findByNome(nome);
-		if (categoria.isPresent()) {
-			return ResponseEntity.ok(categoria.get());
+	public ResponseEntity<Endereco> buscar(@PathVariable Long id) {
+		Optional<Endereco> endereco = enderecoService.findById(id);
+		if (endereco.isPresent()) {
+			return ResponseEntity.ok(endereco.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
-
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "Cria uma nova categoria", notes = "Criar categoria")
+	@ApiOperation(value = "Criar um endereço", notes = "Cria um endereço")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Categoria criada com sucesso"),
+			@ApiResponse(code = 200, message = "Endereço criado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
 			@ApiResponse(code = 404, message = "Recurso não encontrado"),
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria) {
-		Categoria categoriaSalva = categoriaService.criar(categoria);
+	public ResponseEntity<Endereco> criar(@Valid @RequestBody Endereco endereco) {
+		Endereco enderecoSalvo = enderecoService.criar(endereco);
 		
 		URI uri = null;
 		try {
-			uri = new URI("/api/categoria/" + categoriaSalva.getNome());
+			uri = new URI("/api/endereco/" + enderecoSalvo.getId());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.created(uri).body(categoriaSalva);	
+		return ResponseEntity.created(uri).body(enderecoSalvo);
 	}
-
-	@PutMapping("/{nome}")
-	@ApiOperation(value = "Atualiza os dados da categoria", notes = "Atualizar categoria")
+	
+	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualizar um endereço", notes = "Atualiza um endereço")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Categoria atualizada com sucesso"),
+			@ApiResponse(code = 200, message = "Endereço atualizado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
 			@ApiResponse(code = 404, message = "Recurso não encontrado"),
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public ResponseEntity<Categoria> atualizar(@PathVariable String nome, @Valid @RequestBody Categoria categoria) {
-		Categoria categoriaAtualizada = categoriaService.atualizar(nome, categoria);
-		if (categoriaAtualizada == null) {
+	public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @Valid @RequestBody Endereco endereco) {
+		Endereco enderecoAtualizado = enderecoService.atualizar(id, endereco);
+		
+		if (enderecoAtualizado == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(categoriaAtualizada);
+		return ResponseEntity.ok(enderecoAtualizado);
 	}
 	
-	@Transactional
-	@DeleteMapping("/{nome}")
-	@ApiOperation(value = "Deleta uma categoria", notes = "Deletar categoria")
+	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Deletar um endereço", notes = "Deleta um endereço")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 204, message = "Categoria deletada com sucesso"),
+			@ApiResponse(code = 200, message = "Endereço deletado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
 			@ApiResponse(code = 404, message = "Recurso não encontrado"),
 			@ApiResponse(code = 500, message = "Erro no servidor"),
 			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
 	})
-	public ResponseEntity<Categoria> deletar(@PathVariable String nome) {
-		if(!categoriaService.deletar(nome)) {
+	public ResponseEntity<Endereco> deletar(@PathVariable Long id) {
+		if (!enderecoService.deletar(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.noContent().build();	
+		return ResponseEntity.noContent().build();
 	}
-
 }

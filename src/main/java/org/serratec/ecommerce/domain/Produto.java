@@ -1,11 +1,10 @@
 package org.serratec.ecommerce.domain;
 
-
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Produto {
@@ -13,16 +12,13 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//TODO:relacionar one to one
-	//private List<Categoria> categoria;
-	
+	@ManyToOne
+	private Categoria categoria;
 	
 	private String nome;
 	
-	
 	private String descricao;
 	
-
 	private Double valor;
 	
 	public Produto(Long id, String nome, String descricao, Double valor) {
@@ -31,9 +27,10 @@ public class Produto {
 		this.descricao = descricao;
 		this.valor = valor;
 	}
-	public Produto() {
-		
+	
+	public Produto() {	
 	}
+	
 	public void setValor(Double valor) {
 		this.valor = valor;
 	}
