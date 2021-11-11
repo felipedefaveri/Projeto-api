@@ -1,12 +1,14 @@
 package org.serratec.ecommerce.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.serratec.ecommerce.domain.Produto;
-import org.serratec.ecommerce.repository.ProdutoRepository;
+import org.serratec.ecommerce.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,72 +27,101 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("api/produtos")
+@RequestMapping("api/produto")
 public class ProdutoController {
-
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private ProdutoService produtoService;
 	
 	@GetMapping
-	public ResponseEntity<List<Produto>> localizar() {
-		List<Produto> produtos = produtoRepository.findAll();
+	@ApiOperation(value = "Retorna todas os produtos", notes = "Todos os produtos")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Produtos obtidos com sucesso"),
+			@ApiResponse(code = 401, message = "Erro de autenticação"),
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<List<Produto>> obterTodos() {
+		List<Produto> produtos = produtoService.obterTodos();
 		return ResponseEntity.ok(produtos);
 	}
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "cria uma nova categoria", notes = " criar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "categoria adicionada"),
-			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
-	public Produto criar(@RequestBody @Valid Produto produto) {
-		return produtoRepository.save(produto);
-
-	}
-
+	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "retorna uma categoria", notes = "categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "retorna categoria"),
+	@ApiOperation(value = "Retorna um produto por ID", notes = "Produto por ID")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Produto obtido com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
 	public ResponseEntity<Produto> buscar(@PathVariable Long id) {
-		Optional<Produto> produto = produtoRepository.findById(id);
+		Optional<Produto> produto = produtoService.buscar(id);
 		if (produto.isPresent()) {
 			return ResponseEntity.ok(produto.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "Criar um produto", notes = "Cria um ptoduto")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Produto criado com sucesso"),
+			@ApiResponse(code = 401, message = "Erro de autenticação"),
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<Produto> criar(@RequestBody @Valid Produto produto) {
+		Produto produtoSalvo = produtoService.criar(produto);
+		
+		URI uri = null;
+		try {
+			uri = new URI("/api/produto/" + produtoSalvo.getId());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.created(uri).body(produtoSalvo);
+	}
 
 	@PutMapping("/{id}")
-	@ApiOperation(value = "atualiza os dados da categoria", notes = "atualizar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "categoria atualizada"),
+	@ApiOperation(value = "Atualizar um produto", notes = "Atualiza um produto")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Produto atualizado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
 	public ResponseEntity<Produto> atualizar(@PathVariable Long id, @Valid @RequestBody Produto produto) {
-		if (!produtoRepository.existsById(id)) {
+		Produto produtoAtualizado = produtoService.atualizar(id, produto);
+		
+		if (produtoAtualizado == null) {
 			return ResponseEntity.notFound().build();
 		}
-		produto.setId(id);
-		produto = produtoRepository.save(produto);
-		return ResponseEntity.ok(produto);
+		
+		return ResponseEntity.ok(produtoAtualizado);
 	}
+	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "deleta uma categoria", notes = "deletar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "categoria deletada"),
+	@ApiOperation(value = "Deletar um produto", notes = "Deleta um produto")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Produto deletado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
 	public ResponseEntity<Produto> deletar(@PathVariable Long id) {
-		if (!produtoRepository.existsById(id)) {
+		if (!produtoService.deletar(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		produtoRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 

@@ -1,13 +1,14 @@
 package org.serratec.ecommerce.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.serratec.ecommerce.domain.Endereco;
-import org.serratec.ecommerce.domain.Produto;
-import org.serratec.ecommerce.repository.EnderecoRepository;
+import org.serratec.ecommerce.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,71 +29,99 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/api/endereco")
 public class EnderecoController {
-
 	@Autowired
-	private EnderecoRepository enderecoRepository;
+	private EnderecoService enderecoService;
 	
 	@GetMapping
-	public ResponseEntity<List<Endereco>> localizar() {
-		List<Endereco> enderecos = enderecoRepository.findAll();
+	@ApiOperation(value = "Retorna todas os endereços", notes = "Todos os endereços")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Endereços obtidos com sucesso"),
+			@ApiResponse(code = 401, message = "Erro de autenticação"),
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<List<Endereco>> obterTodos() {
+		List<Endereco> enderecos = enderecoService.obterTodos();
 		return ResponseEntity.ok(enderecos);
 	}
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "cria uma nova categoria", notes = " criar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "categoria adicionada"),
-			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
-	public Endereco criar(@RequestBody @Valid Endereco endereco) {
-		return enderecoRepository.save(endereco);
-
-	}
-
+	
 	@GetMapping("/{id}")
-	@ApiOperation(value = "retorna uma categoria", notes = "categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "retorna categoria"),
+	@ApiOperation(value = "Retorna um endereço por ID", notes = "Endereço por ID")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Endereço obtido com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
 	public ResponseEntity<Endereco> buscar(@PathVariable Long id) {
-		Optional<Endereco> endereco = enderecoRepository.findById(id);
+		Optional<Endereco> endereco = enderecoService.buscar(id);
 		if (endereco.isPresent()) {
 			return ResponseEntity.ok(endereco.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
-
-	@PutMapping("/{id}")
-	@ApiOperation(value = "atualiza os dados da categoria", notes = "atualizar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "categoria atualizada"),
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "Criar um endereço", notes = "Cria um endereço")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Endereço criado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
-	public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @Valid @RequestBody Endereco endereco) {
-		if (!enderecoRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<Endereco> criar(@Valid @RequestBody Endereco endereco) {
+		Endereco enderecoSalvo = enderecoService.criar(endereco);
+		
+		URI uri = null;
+		try {
+			uri = new URI("/api/endereco/" + enderecoSalvo.getId());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
-		endereco.setId(id);
-		endereco = enderecoRepository.save(endereco);
-		return ResponseEntity.ok(endereco);
+		return ResponseEntity.created(uri).body(enderecoSalvo);
 	}
-	@DeleteMapping("/{id}")
-	@ApiOperation(value = "deleta uma categoria", notes = "deletar categoria")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "categoria deletada"),
+	
+	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualizar um endereço", notes = "Atualiza um endereço")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Endereço atualizado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
-			@ApiResponse(code = 403, message = "vc nao tem permissao para acessar o produto"),
-			@ApiResponse(code = 404, message = "recurso nao encontrado"),
-			@ApiResponse(code = 505, message = "quando ocorre uma exceção") })
-	public ResponseEntity<Endereco> deletar(@PathVariable Long id) {
-		if (!enderecoRepository.existsById(id)) {
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @Valid @RequestBody Endereco endereco) {
+		Endereco enderecoAtualizado = enderecoService.atualizar(id, endereco);
+		
+		if (enderecoAtualizado == null) {
 			return ResponseEntity.notFound().build();
 		}
-		enderecoRepository.deleteById(id);
+		
+		return ResponseEntity.ok(enderecoAtualizado);
+	}
+	
+	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Deletar um endereço", notes = "Deleta um endereço")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Endereço deletado com sucesso"),
+			@ApiResponse(code = 401, message = "Erro de autenticação"),
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar o recurso"),
+			@ApiResponse(code = 404, message = "Recurso não encontrado"),
+			@ApiResponse(code = 500, message = "Erro no servidor"),
+			@ApiResponse(code = 505, message = "Ocorreu uma exceção")
+	})
+	public ResponseEntity<Endereco> deletar(@PathVariable Long id) {
+		if (!enderecoService.deletar(id)) {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.noContent().build();
 	}
-
 }
