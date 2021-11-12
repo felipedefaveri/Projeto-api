@@ -117,6 +117,4 @@ public class Pedido {
 		Pedido other = (Pedido) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }

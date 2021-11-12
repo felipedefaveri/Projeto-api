@@ -12,18 +12,18 @@ import org.serratec.ecommerce.exception.EmailException;
 import org.serratec.ecommerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.serratec.ecommerce.repository.ClienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
-	
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	
 	public List<ClienteLogadoDTO> listar(){
 		List<ClienteLogadoDTO> clientesDTO = new ArrayList<ClienteLogadoDTO>();
 		List<Cliente> clientes = clienteRepository.findAll();
@@ -32,14 +32,20 @@ public class ClienteService {
 			ClienteLogadoDTO clienteDTO = new ClienteLogadoDTO(cliente);
 			clientesDTO.add(clienteDTO);
 		}
-		
 		return clientesDTO;
+  }
+  
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	public List<Cliente> obterTodos() {
+		return clienteRepository.findAll();
 	}
 
 	public Optional<Cliente> buscar(Long id) {
 		return clienteRepository.findById(id);
 	}
-	
+
 	public ClienteLogadoDTO criar(ClienteLogadoDTO clienteLogadoDTO) throws EmailException {
 		
 		if (clienteRepository.findByEmail(clienteLogadoDTO.getEmail()) != null) {
@@ -53,6 +59,9 @@ public class ClienteService {
 		cliente = clienteRepository.save(cliente);
 		
 		return new ClienteLogadoDTO(cliente);
+
+	public Cliente criar(@Valid Cliente cliente) {
+		return clienteRepository.save(cliente);
 	}
 
 	public Cliente atualizar(Long id, @Valid Cliente cliente) {
@@ -71,9 +80,3 @@ public class ClienteService {
 		return false;
 	}
 }
-
-
-
-// os dois-pontos são um operador foreach
-// para cada usuario em usuarios(que é uma instância da lista de usuários),
-// crie uma nova instância de usuarioDTO, e adicione em usuarioDTO. depois, retorne usuarioDTO

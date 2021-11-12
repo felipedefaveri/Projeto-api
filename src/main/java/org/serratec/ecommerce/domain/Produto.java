@@ -99,6 +99,4 @@ public class Produto {
 		Produto other = (Produto) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }

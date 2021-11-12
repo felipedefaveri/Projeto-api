@@ -44,11 +44,6 @@ public class Cliente {
 	@Size(min=6, max=10, message = "Senha deve ter entre {min} e {max} números.")
 	private String senha;
 	
-	@CPF(message = "CPF incorreto")
-	@NotBlank(message = "CPF não pode ser vazio")
-	@Size(max=11, message = "O CPF não pode ter mais que {max} números")
-	private String cpf;
-	
 	@ManyToOne
 	@JoinColumn(name = "id_endereco")
 	private Endereco endereco;
@@ -125,7 +120,7 @@ public class Cliente {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-	
+
 	public String getSenha() {
 		return senha;
 	}
@@ -154,6 +149,4 @@ public class Cliente {
 		Cliente other = (Cliente) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }

@@ -158,6 +158,4 @@ public class Endereco {
 		Endereco other = (Endereco) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 }

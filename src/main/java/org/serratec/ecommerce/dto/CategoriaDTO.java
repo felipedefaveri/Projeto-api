@@ -1,6 +1,5 @@
 package org.serratec.ecommerce.dto;
 
-
 import java.util.List;
 
 import org.serratec.ecommerce.domain.Categoria;
@@ -43,5 +42,4 @@ public class CategoriaDTO {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-    
 }
