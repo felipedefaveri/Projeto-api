@@ -2,6 +2,7 @@ package org.serratec.ecommerce.domain;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,10 +40,9 @@ public class Cliente {
 	@NotBlank(message = "E-mail não pode ser vazio")
 	private String email;
 	
-	@CPF(message = "CPF incorreto")
-	@NotBlank(message = "CPF não pode ser vazio")
-	@Size(max=11, message = "O CPF não pode ter mais que {max} números")
-	private String cpf;
+	@NotBlank(message = "Senha não pode ser vazio")
+	@Size(min=6, max=10, message = "Senha deve ter entre {min} e {max} números.")
+	private String senha;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_endereco")
@@ -121,7 +121,32 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	public List<Pedido> getPedidos() {
 		return pedidos;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		return Objects.equals(id, other.id);
 	}
 }
