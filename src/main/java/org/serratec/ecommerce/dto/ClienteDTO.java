@@ -1,43 +1,55 @@
 package org.serratec.ecommerce.dto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.serratec.ecommerce.domain.Cliente;
 import org.serratec.ecommerce.domain.Endereco;
 import org.serratec.ecommerce.domain.Pedido;
 
-public class ClienteLogadoDTO {
+public class ClienteDTO {
+	private Long id;
 	private String nome;
 	private String sobrenome;
 	private LocalDate dataNascimento;
 	private String email;
 	private String cpf;
-	private String senha;
 	private Endereco endereco;
 	private List<Pedido> pedidos;
-
-	public ClienteLogadoDTO() {
+	
+	public ClienteDTO() {
+		
 	}
-
-	public ClienteLogadoDTO(String nome, String sobrenome, LocalDate dataNascimento, String email, String cpf, String senha, Endereco endereco, List<Pedido> pedidos) {
-		super();
+	
+	public ClienteDTO(Long id, String nome, String sobrenome, LocalDate dataNascimento, String email, String cpf,
+			Endereco endereco, List<Pedido> pedidos) {
+		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.dataNascimento = dataNascimento;
 		this.email = email;
 		this.cpf = cpf;
-		this.senha = senha;
+		this.endereco = endereco;
+		this.pedidos = pedidos;
 	}
 
-	public ClienteLogadoDTO(Cliente cliente) {
+	public ClienteDTO(Cliente cliente) {
+		this.id = cliente.getId();
 		this.nome = cliente.getNome();
 		this.sobrenome = cliente.getSobrenome();
 		this.dataNascimento = cliente.getDataNascimento();
 		this.email = cliente.getEmail();
 		this.cpf = cliente.getCpf();
-		this.senha = cliente.getSenha();
+		this.endereco = cliente.getEndereco();
+		this.pedidos = cliente.getPedidos();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -88,30 +100,11 @@ public class ClienteLogadoDTO {
 		this.endereco = endereco;
 	}
 
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
-	}
-	
-	
-	public List<ClienteLogadoDTO> convert (List<Cliente> clientes) {
-		List<ClienteLogadoDTO> clienteLogDTO = new ArrayList<>();
-		for (Cliente cliente : clientes) {
-			ClienteLogadoDTO clienteLogadoDTO = new ClienteLogadoDTO(cliente);
-			clienteLogDTO.add(clienteLogadoDTO);	
-		}
-		
-		return clienteLogDTO;
 	}
 }

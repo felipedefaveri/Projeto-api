@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.serratec.ecommerce.domain.Cliente;
+import org.serratec.ecommerce.dto.ClienteDTO;
 import org.serratec.ecommerce.dto.ClienteLogadoDTO;
 import org.serratec.ecommerce.exception.EmailException;
 import org.serratec.ecommerce.repository.ClienteRepository;
@@ -42,11 +43,12 @@ public class ClienteService {
         return clienteRepository.findById(id);
     }
 
-    public ClienteLogadoDTO criar(ClienteLogadoDTO clienteLogadoDTO) throws EmailException {
+    public ClienteDTO criar(ClienteLogadoDTO clienteLogadoDTO) throws EmailException {
         
         if (clienteRepository.findByEmail(clienteLogadoDTO.getEmail()) != null) {
             throw new EmailException("E-mail existente.");
         }
+        
         Cliente cliente = new Cliente();
             cliente.setNome(clienteLogadoDTO.getNome());
             cliente.setSobrenome(clienteLogadoDTO.getSobrenome());
@@ -56,7 +58,7 @@ public class ClienteService {
             cliente.setSenha(passwordEncoder.encode(clienteLogadoDTO.getSenha()));
             cliente = clienteRepository.save(cliente);
         
-        return new ClienteLogadoDTO(cliente);
+        return new ClienteDTO(cliente);
     }
 
     public ClienteLogadoDTO atualizar(Long id, @Valid ClienteLogadoDTO clienteLogadoDTO) {
