@@ -11,37 +11,48 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_endereco")
+	@ApiModelProperty(value = "Identificador único do endereço do cliente")
 	private Long id;
 	
 	@NotBlank(message = "Rua não pode ser vazio" )
+	@ApiModelProperty(value = "Nome da rua", required = true)
 	private String rua;
 	
-	@NotBlank(message = "Número da rua não pode ser vazio" )
+	@NotBlank(message = "Número da casa não pode ser vazio" )
+	@ApiModelProperty(value = "Número da casa", required = true)
 	private String numero;
 	
+	@ApiModelProperty(value = "Complemento do logradouro (opcional)")
 	private String complemento;
 	
 	@NotBlank(message = "Bairro não pode ser vazio" )
+	@ApiModelProperty(value = "Bairro do cliente", required = true)
 	private String bairro;
 	
 	@NotBlank(message = "Cidade não pode ser vazio" )
+	@ApiModelProperty(value = "Cidade do cliente", required = true)
 	private String cidade;
 	
 	@NotBlank(message = "Estado não pode ser vazio" )
 	@Size(max = 2, message = "Número de caracteres excedido, use a sigla para o estado, ")
+	@ApiModelProperty(value = "Estado do cliente (sigla)", required = true)
 	private String estado;
 	
 	@NotBlank(message = "País não pode ser vazio" )
+	@ApiModelProperty(value = "País do cliente", required = true)
 	private String pais;
 	
 	@NotBlank(message = "CEP não pode ser vazio" )
 	@Size(max=9, message = "Número de caracteres excedido")
 	@Pattern(regexp="^\\d{5}[-]?\\d{3}$")
+	@ApiModelProperty(value = "CEP do cliente", required = true)
 	private String cep;
 	
 	public Endereco() {
@@ -149,3 +160,4 @@ public class Endereco {
 		return Objects.equals(id, other.id);
 	}
 }
+
