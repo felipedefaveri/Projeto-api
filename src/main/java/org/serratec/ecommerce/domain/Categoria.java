@@ -1,6 +1,7 @@
 package org.serratec.ecommerce.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,4 +58,20 @@ public class Categoria {
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}
-}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Categoria other = (Categoria) obj;
+		return Objects.equals(id, other.id);
+	}
