@@ -8,12 +8,16 @@ import javax.validation.Valid;
 import org.serratec.ecommerce.domain.Cliente;
 import org.serratec.ecommerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	public List<Cliente> obterTodos() {
 		return clienteRepository.findAll();

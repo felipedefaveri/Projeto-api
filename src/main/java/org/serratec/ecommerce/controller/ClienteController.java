@@ -34,7 +34,7 @@ public class ClienteController {
 	private ClienteService clienteService;
 	
 	@GetMapping
-	@ApiOperation(value = "Retorna todas os clientes", notes = "Todos os clientes")
+	@ApiOperation(value = "Retorna todos os clientes", notes = "Todos os clientes")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Clientes obtidos com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
@@ -68,7 +68,7 @@ public class ClienteController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "Criar um cliente", notes = "Cria um cliente")
+	@ApiOperation(value = "Cria um cliente", notes = "Cria um cliente")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Cliente criado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
@@ -90,7 +90,7 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Atualizar um cliente", notes = "Atualiza um cliente")
+	@ApiOperation(value = "Atualiza um cliente", notes = "Atualiza um cliente")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Cliente atualizado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
@@ -110,7 +110,7 @@ public class ClienteController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Deletar um cliente", notes = "Deleta um cliente")
+	@ApiOperation(value = "Deleta um cliente", notes = "Deleta um cliente")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Cliente deletado com sucesso"),
 			@ApiResponse(code = 401, message = "Erro de autenticação"),
