@@ -26,38 +26,47 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_cliente")
+	@ApiModelProperty(value = "Identificador único do cliente")
 	private Long id;
 	
 	@NotBlank(message = "Nome não pode ser vazio" )
+	@ApiModelProperty(value = "Nome do cliente", required = true)
 	private String nome;
 	
 	@NotBlank(message = "Sobrenome não pode ser vazio" )
+	@ApiModelProperty(value = "Sobrenome do cliente", required = true)
 	private String sobrenome;
 	
 	@Past(message = "Data inválida")
     @Column(name="data_nascimento")
+	@ApiModelProperty(value = "Data de Nascimento do cliente", required = true)
 	private LocalDate dataNascimento;
 	
 	@Email(message ="E-mail incorreto")
 	@NotBlank(message = "E-mail não pode ser vazio")
+	@ApiModelProperty(value = "Email do cliente", required = true)
 	private String email;
 	
-	@NotBlank(message = "Preencha o CPF.")
-	@CPF(message = "CPF incorreto")
-	@Column
+	@CPF
+	@NotBlank(message = "CPF deve conter 11 números")
 	@ApiModelProperty(value = "CPF do cliente", required = true)
-    private String cpf;
+	private String cpf;
 	
 	@NotBlank(message = "Senha não pode ser vazio")
 	@Size(min=6, max=10, message = "Senha deve ter entre {min} e {max} números.")
+	@ApiModelProperty(value = "Senha do cliente", required = true)
 	private String senha;
 	
 	@OneToOne
 	@JoinColumn(name = "id_endereco")
+	@ApiModelProperty(value = "Endereço do cliente", required = true)
 	private Endereco endereco;
 	
 	@OneToMany(mappedBy = "cliente")
+	@ApiModelProperty(value = "Lista de pedidos efetuados pelo cliente", required = true)
 	private List<Pedido> pedidos;
+
+	
 	
 	public Cliente() {
 	}
