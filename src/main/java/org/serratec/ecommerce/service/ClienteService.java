@@ -12,9 +12,6 @@ import org.serratec.ecommerce.exception.EmailException;
 import org.serratec.ecommerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.serratec.ecommerce.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -57,7 +54,8 @@ public class ClienteService {
 		cliente = clienteRepository.save(cliente);
 		
 		return new ClienteLogadoDTO(cliente);
-
+	}
+	
 	public Cliente criar(@Valid Cliente cliente) {
 		return clienteRepository.save(cliente);
 	}

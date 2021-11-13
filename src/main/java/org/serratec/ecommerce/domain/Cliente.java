@@ -19,6 +19,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 public class Cliente {
 	@Id
@@ -39,6 +41,12 @@ public class Cliente {
 	@Email(message ="E-mail incorreto")
 	@NotBlank(message = "E-mail não pode ser vazio")
 	private String email;
+	
+	@NotBlank(message = "Preencha o CPF.")
+	@CPF(message = "CPF incorreto")
+	@Column
+	@ApiModelProperty(value = "CPF do cliente", required = true)
+    private String cpf;
 	
 	@NotBlank(message = "Senha não pode ser vazio")
 	@Size(min=6, max=10, message = "Senha deve ter entre {min} e {max} números.")

@@ -1,6 +1,5 @@
 package org.serratec.ecommerce.domain;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -131,10 +130,6 @@ public class Endereco {
 
 	public void setCep(String cep) {
 		this.cep = cep;
-	}
-
-	public List<Cliente> getListCliente() {
-		return listCliente;
 	}
 
 	@Override
