@@ -1,102 +1,128 @@
 package org.serratec.ecommerce.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import io.swagger.annotations.ApiModelProperty;
 
-//TODO:verificar os relacionamentos 
 @Entity
 public class Pedido {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pedido")
+    @ApiModelProperty(value = "Identificador único do pedido")
+    private Long id;
+    
+    @Column(name = "data_pedido")
+    @ApiModelProperty(value = "Data da efetuação do pedido", required = true)
+    private LocalDateTime dataPedido;
 
-	private LocalDateTime dataPedido;
+    @ApiModelProperty(value = "Valor total dos itens do pedido", required = true)
+    private Double valorTotal;
 
-	private Double valorFinal;
+    @Column(name = "data_envio")
+    @ApiModelProperty(value = "Data de envio do pedido", required = true)
+    private LocalDateTime dataEnvio;
 
-	private Long quantidade;
+    @Column(name = "data_entrega")
+    @ApiModelProperty(value = "Data da entrega do pedido ao cliente")
+    private LocalDateTime dataEntrega;
+    
+    @ApiModelProperty(value = "Status do pedido", required = true)
+    private String status;
 
-	private LocalDateTime dataEnvio;
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+    
+    public Pedido() {
+    }
 
-	private LocalDateTime dataEntrega;
+    public Pedido(Long id, LocalDateTime dataPedido, Double valorTotal, LocalDateTime dataEnvio,
+            LocalDateTime dataEntrega, String status, Cliente cliente) {
+        this.id = id;
+        this.dataPedido = dataPedido;
+        this.valorTotal = valorTotal;
+        this.dataEnvio = dataEnvio;
+        this.dataEntrega = dataEntrega;
+        this.status = status;
+        this.cliente = cliente;
+    }
 
-	//relacionamento one to many
-//	private List<Produto> produtos;
+    public Long getId() {
+        return id;
+    }
 
-	public Pedido(Long id, LocalDateTime dataPedido, Double valorFinal, Long quantidade, LocalDateTime dataEnvio,
-			LocalDateTime dataEntrega) {
-		super();
-		this.id = id;
-		this.dataPedido = dataPedido;
-		this.valorFinal = valorFinal;
-		this.quantidade = quantidade;
-		this.dataEnvio = dataEnvio;
-		this.dataEntrega = dataEntrega;
-//		this.produtos = produtos;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public LocalDateTime getDataPedido() {
+        return dataPedido;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setDataPedido(LocalDateTime dataPedido) {
+        this.dataPedido = dataPedido;
+    }
 
-	public LocalDateTime getDataPedido() {
-		return dataPedido;
-	}
+    public Double getValorTotal() {
+        return valorTotal;
+    }
 
-	public void setDataPedido(LocalDateTime dataPedido) {
-		this.dataPedido = dataPedido;
-	}
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
 
-	public Double getValorFinal() {
-		return valorFinal;
-	}
+    public LocalDateTime getDataEnvio() {
+        return dataEnvio;
+    }
 
-	public void setValorFinal(Double valorFinal) {
-		this.valorFinal = valorFinal;
-	}
+    public void setDataEnvio(LocalDateTime dataEnvio) {
+        this.dataEnvio = dataEnvio;
+    }
 
-	public Long getQuantidade() {
-		return quantidade;
-	}
+    public LocalDateTime getDataEntrega() {
+        return dataEntrega;
+    }
 
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
-	}
+    public void setDataEntrega(LocalDateTime dataEntrega) {
+        this.dataEntrega = dataEntrega;
+    }
 
-	public LocalDateTime getDataEnvio() {
-		return dataEnvio;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setDataEnvio(LocalDateTime dataEnvio) {
-		this.dataEnvio = dataEnvio;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public LocalDateTime getDataEntrega() {
-		return dataEntrega;
-	}
+    public Cliente getCliente() {
+        return cliente;
+    }
 
-	public void setDataEntrega(LocalDateTime dataEntrega) {
-		this.dataEntrega = dataEntrega;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
-	//public List<Produto> getProdutos() {
-	//	return produtos;
-	//}
-
-	//public void setProdutos(List<Produto> produtos) {
-	//.produtos = produtos;
-//	}
-	
-	//relacionamento one to one
-	//private Cliente cliente;
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Pedido other = (Pedido) obj;
+        return Objects.equals(id, other.id);
+    }
 }

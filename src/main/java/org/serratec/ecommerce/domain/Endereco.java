@@ -1,108 +1,163 @@
 package org.serratec.ecommerce.domain;
 
-import javax.persistence.Embeddable;
+import java.util.Objects;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 public class Endereco {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_endereco")
+	@ApiModelProperty(value = "Identificador único do endereço do cliente")
 	private Long id;
 	
-	@NotBlank(message = "nome não pode ser vazio" )
+	@NotBlank(message = "Rua não pode ser vazio" )
+	@ApiModelProperty(value = "Nome da rua", required = true)
 	private String rua;
-	@NotBlank(message = "nome não pode ser vazio" )
+	
+	@NotBlank(message = "Número da casa não pode ser vazio" )
+	@ApiModelProperty(value = "Número da casa", required = true)
 	private String numero;
+	
+	@ApiModelProperty(value = "Complemento do logradouro (opcional)")
 	private String complemento;
-	@NotBlank(message = "nome não pode ser vazio" )
+	
+	@NotBlank(message = "Bairro não pode ser vazio" )
+	@ApiModelProperty(value = "Bairro do cliente", required = true)
 	private String bairro;
-	@NotBlank(message = "nome não pode ser vazio" )
+	
+	@NotBlank(message = "Cidade não pode ser vazio" )
+	@ApiModelProperty(value = "Cidade do cliente", required = true)
 	private String cidade;
-	@NotBlank(message = "nome não pode ser vazio" )
+	
+	@NotBlank(message = "Estado não pode ser vazio" )
+	@Size(max = 2, message = "Número de caracteres excedido, use a sigla para o estado, ")
+	@ApiModelProperty(value = "Estado do cliente (sigla)", required = true)
 	private String estado;
-	@NotBlank(message = "nome não pode ser vazio" )
+	
+	@NotBlank(message = "País não pode ser vazio" )
+	@ApiModelProperty(value = "País do cliente", required = true)
 	private String pais;
-	@NotBlank(message = "nome não pode ser vazio" )
-	private String CEP;
-	public Endereco(Long id, @NotBlank(message = "nome não pode ser vazio") String rua,
-			@NotBlank(message = "nome não pode ser vazio") String numero, String complemento,
-			@NotBlank(message = "nome não pode ser vazio") String bairro,
-			@NotBlank(message = "nome não pode ser vazio") String cidade,
-			@NotBlank(message = "nome não pode ser vazio") String estado,
-			@NotBlank(message = "nome não pode ser vazio") String pais,
-			@NotBlank(message = "nome não pode ser vazio") String cEP) {
-		super();
-		this.id = id;
-		this.rua = rua;
-		this.numero = numero;
-		this.complemento = complemento;
-		this.bairro = bairro;
-		this.cidade = cidade;
-		this.estado = estado;
-		this.pais = pais;
-		this.CEP = cEP;
-	}
+	
+	@NotBlank(message = "CEP não pode ser vazio" )
+	@Size(max=9, message = "Número de caracteres excedido")
+	@Pattern(regexp="^\\d{5}[-]?\\d{3}$")
+	@ApiModelProperty(value = "CEP do cliente", required = true)
+	private String cep;
+	
 	public Endereco() {
 		
 	}
+
+	public Endereco(Long id, String rua, String numero, String complemento, String bairro, String cidade, String estado, String pais, String cep) {
+		this.id = id;
+		this.rua = rua;
+		this.numero = numero;
+		this.complemento = complemento;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
+		this.pais = pais;
+		this.cep = cep;
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getRua() {
 		return rua;
 	}
+
 	public void setRua(String rua) {
 		this.rua = rua;
 	}
+
 	public String getNumero() {
 		return numero;
 	}
+
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+
 	public String getComplemento() {
 		return complemento;
 	}
+
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
+
 	public String getBairro() {
 		return bairro;
 	}
+
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
 	}
+
 	public String getCidade() {
 		return cidade;
 	}
+
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
+
 	public String getEstado() {
 		return estado;
 	}
+
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
 	public String getPais() {
 		return pais;
 	}
+
 	public void setPais(String pais) {
 		this.pais = pais;
 	}
-	public String getCEP() {
-		return CEP;
+
+	public String getCep() {
+		return cep;
 	}
-	public void setCEP(String cEP) {
-		this.CEP = cEP;
+
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Endereco other = (Endereco) obj;
+		return Objects.equals(id, other.id);
+	}
 }
+
